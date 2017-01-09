@@ -36,6 +36,8 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
             
         case 3 :
             cell.menuLabel.text = "Go to setting"
+        case 4 :
+            cell.menuLabel.text = "Navi to AC"
         default:
             break
         }
@@ -55,6 +57,8 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
             changeColor(cell: collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell)
         case 3 :
             openSetting()
+        case 4 :
+            openGoogleMap()
         default:
             break
         }
@@ -96,6 +100,21 @@ extension ViewController{
         //show the steps from mid night
         if CMPedometer.isStepCountingAvailable(){
             print("It's available")
+            // initial steps
+            pedoMeter.queryPedometerData(from: midnightOfToday, to: Date(), withHandler: { (data, error) in
+                if error != nil {
+                    print("error:\(error?.localizedDescription)")
+                }else{
+                    print("did updated")
+                    print("\(String(data!.numberOfSteps.intValue))")
+                    DispatchQueue.main.async {
+                        if let steps = data?.numberOfSteps.intValue{
+                            cell.menuLabel.text = "Today's stpes:\(steps)"
+                        }
+                    }
+                }
+            })
+            
             //update steps
             pedoMeter.startUpdates(from: midnightOfToday, withHandler: { (data, error) in
                 if error != nil {
@@ -132,6 +151,8 @@ extension ViewController{
                 } else {
                     UIApplication.shared.openURL(settingsUrl)
                 }
+            }else{
+                print("Can't open setting")
             }
         }
         alertController.addAction(settingsAction)
@@ -139,5 +160,16 @@ extension ViewController{
         alertController.addAction(cancelAction)
         
         present(alertController, animated: true, completion: nil)
+    }
+    //open google map
+    func openGoogleMap(){
+        guard let openGoogleMapUrl = URL(string: "comgooglemaps://?saddr=&daddr=25.052522,121.532259&directionsmode=driving") else {
+            return
+        }
+        if UIApplication.shared.canOpenURL(openGoogleMapUrl){
+            UIApplication.shared.openURL(openGoogleMapUrl)
+        }else{
+            print("Can't open Google map")
+        }
     }
 }

@@ -43,5 +43,9 @@
 	</array>
 	<key>NSMotionUsageDescription</key>
 	<string>Yes</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>comgooglemaps</string>
+    </array>
 </dict>
 </plist>
