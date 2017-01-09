@@ -33,6 +33,9 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
             }
         case 2 :
             countStepToday(cell: cell)
+            
+        case 3 :
+            cell.menuLabel.text = "Go to setting"
         default:
             break
         }
@@ -50,8 +53,8 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
             showAlert()
         case 1 :
             changeColor(cell: collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell)
-        case 2 :
-            break
+        case 3 :
+            openSetting()
         default:
             break
         }
@@ -109,7 +112,32 @@ extension ViewController{
             })
         }else{
             print("Step counter is not available")
+            cell.menuLabel.text = "Can't get motion status"
         }
+    }
+    //open the setting
+    func openSetting(){
+        let alertController = UIAlertController (title: "Information", message: "Go to Settings?", preferredStyle: .alert)
         
+        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
+            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                return
+            }
+            
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                        print("Settings opened: \(success)") // Prints true
+                    })
+                } else {
+                    UIApplication.shared.openURL(settingsUrl)
+                }
+            }
+        }
+        alertController.addAction(settingsAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
