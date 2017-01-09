@@ -7,17 +7,21 @@
 //
 
 import UIKit
+import CoreMotion
 
 class ViewController: UIViewController {
     
     var isRed = false
+    
+    let pedoMeter = CMPedometer()
     
     @IBOutlet weak var sixFunctionCollectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
         sixFunctionCollectionView.delegate = self
         sixFunctionCollectionView.dataSource = self
-        // Do any additional setup after loading the view, typically from a nib.
+        
+
     }
 
     override func didReceiveMemoryWarning() {
