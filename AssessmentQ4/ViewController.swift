@@ -10,8 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var sixFunctionCollectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        sixFunctionCollectionView.delegate = self
+        sixFunctionCollectionView.dataSource = self
         // Do any additional setup after loading the view, typically from a nib.
     }
 
