@@ -21,6 +21,15 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
         switch (indexPath.item){
         case 0:
             cell.menuLabel.text = "Show Alert"
+        case 1 :
+            if isRed {
+                cell.backgroundColor = UIColor.red
+                cell.menuLabel.text = "tap to turn Blue"
+            }else{
+                cell.backgroundColor = UIColor.blue
+                cell.menuLabel.text = "tap to turn Red"
+            }
+            
         default:
             break
         }
@@ -36,6 +45,8 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
         switch (indexPath.item){
         case 0 :
             showAlert()
+        case 1 :
+            changeColor(cell: collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell)
         default:
             break
         }
@@ -48,5 +59,17 @@ extension ViewController{
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
         present(alert, animated:true, completion: nil)
+    }
+    
+    func changeColor(cell:CustomCollectionViewCell){
+        if isRed {
+            cell.backgroundColor = UIColor.blue
+            cell.menuLabel.text = "tap to turn Red"
+            isRed = false
+        }else{
+            cell.backgroundColor = UIColor.red
+            cell.menuLabel.text = "tap to turn Blue"
+            isRed = true
+        }
     }
 }

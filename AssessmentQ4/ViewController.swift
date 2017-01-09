@@ -9,7 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    var isRed = false
+    
     @IBOutlet weak var sixFunctionCollectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
