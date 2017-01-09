@@ -7,6 +7,7 @@
 //
 import UIKit
 import CoreMotion
+import MessageUI
 extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate{
 
     // DataSource
@@ -38,16 +39,18 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
             cell.menuLabel.text = "Go to setting"
         case 4 :
             cell.menuLabel.text = "Navi to AC"
+        case 5 :
+            cell.menuLabel.text = "Send Mail"
         default:
             break
         }
         return cell
     }
-
+    //set cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width/2, height: collectionView.frame.height/3)
     }
-    
+    //set the action when selected the cell
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("selected \(indexPath.item)")
         switch (indexPath.item){
@@ -59,6 +62,8 @@ extension ViewController:UICollectionViewDelegateFlowLayout, UICollectionViewDat
             openSetting()
         case 4 :
             openGoogleMap()
+        case 5 :
+            sendMail()
         default:
             break
         }
@@ -87,6 +92,8 @@ extension ViewController{
     }
     // update steps after showing the cell
     func countStepToday(cell:CustomCollectionViewCell){
+        
+        //get the Date formate of mid night
         var cal = Calendar.current
         var comps = cal.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
         comps.hour = 0
@@ -94,7 +101,6 @@ extension ViewController{
         comps.second = 0
         let timeZone = TimeZone.current
         cal.timeZone = timeZone
-        
         let midnightOfToday = cal.date(from: comps)!
         
         //show the steps from mid night
@@ -171,5 +177,22 @@ extension ViewController{
         }else{
             print("Can't open Google map")
         }
+    }
+    // send mail
+    func sendMail(){
+        let mailController = MFMailComposeViewController()
+        if MFMailComposeViewController.canSendMail(){
+            mailController.setSubject("測試信件")
+            mailController.mailComposeDelegate = self
+            present(mailController, animated: true, completion: nil)
+        }else{
+            print("Can't send mail")
+        }
+    }
+}
+
+extension ViewController:MFMailComposeViewControllerDelegate{
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true, completion: nil)
     }
 }
